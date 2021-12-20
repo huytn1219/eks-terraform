@@ -43,3 +43,14 @@ resource "aws_eks_cluster" "this" {
       update = var.cluster_update_timeout
     }
 }
+
+resource "aws_eks_addon" "addons" {
+  for_each = var.cluster_addons
+
+  cluster_name = var.cluster_name
+  addon_name   = each.value
+
+  depends_on = [
+    aws_eks_cluster.this
+  ]
+}

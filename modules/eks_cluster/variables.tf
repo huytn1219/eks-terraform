@@ -102,3 +102,8 @@ variable "cluster_update_timeout" {
   type        = string
   default     = "60m"
 }
+
+variable "cluster_addons" {
+  description = "EKS add-on(s)"
+  type        = set(string)
+}

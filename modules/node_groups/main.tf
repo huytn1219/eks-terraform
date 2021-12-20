@@ -20,7 +20,7 @@ resource "aws_eks_node_group" "this" {
 
     ami_type                  = lookup(each.value, "ami_type", null)
     disk_size                 = each.value["launch_template_id"] != null ? null : lookup(each.value, "disk_size", null)
-    instance_types            = !each.value["set_instance_types_on_lt"] ? each.value["instance_type"] : null
+    instance_types            = lookup(each.value, "instance_type", null)
     release_version           = lookup(each.value, "ami_release_version", null)
     capacity_type             = lookup(each.value, "capacity_type", null)
     force_update_version      = lookup(each.value, "force_update_version", null)
@@ -88,5 +88,4 @@ resource "aws_eks_node_group" "this" {
         create_before_destroy = true
         ignore_changes        = [scaling_config[0].desired_size]
     }
-
 }
