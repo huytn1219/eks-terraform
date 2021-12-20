@@ -44,13 +44,16 @@ resource "aws_eks_cluster" "this" {
     }
 }
 
-resource "aws_eks_addon" "addons" {
-  for_each = var.cluster_addons
+# Required EKS CNI in order for Worker Node to be provision successfully
+module "required_addons" {
+  source = "../eks-addons"
 
-  cluster_name = var.cluster_name
-  addon_name   = each.value
+  cluster_name       = var.cluster_name
+  eks_addon_defaults = local.eks_addon_defaults
+  eks_addons = {
+    vpc-cni = {},
+    kube-proxy = {},
+  }
 
-  depends_on = [
-    aws_eks_cluster.this
-  ]
+  depends_on = [aws_eks_cluster.this]
 }

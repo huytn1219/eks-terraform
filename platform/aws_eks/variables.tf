@@ -69,12 +69,6 @@ variable "cluster_endpoint_public_access_cidrs" {
   default     = ["0.0.0.0/0"]
 }
 
-variable "node_groups" {
-  description = "Map of maps of `eks_node_groups` to create. See \"`node_groups` and `node_groups_defaults` keys\" section in README.md for more details"
-  type        = any
-  default     = {}
-}
-
 variable "worker_subnet_ids" {
   description = "List of the subnets where worker nodes will be deployed on to"
   type        = list(string)

@@ -4,7 +4,7 @@ variable "create_tpl" {
   default     = true
 }
 
-variable "prefix" {
+variable "suffix" {
   description = "Name to be used on all the resources as identifier"
   type        = string
   default     = "eks-tpl"
@@ -13,12 +13,12 @@ variable "prefix" {
 variable "name" {
   description = "Name to be used on all the resources as identifier"
   type        = string
-  default     = "node-group"
+  default     = ""
 }
 
 variable "launch_template_image_id" {
   type        = string
-  description = "Wheter or not to use Custom AMI Images"
+  description = "ID of Custom AMI Image"
   default     = ""
 }
 
@@ -88,8 +88,3 @@ variable "tags" {
   default     = {}
 }
 
-variable "template_tags" {
-  description = "Additional tags for the instance templates"
-  type        = map(string)
-  default     = {}
-}
