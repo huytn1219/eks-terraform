@@ -49,7 +49,7 @@ variable "ebs_volume_type" {
 variable "ebs_iops" {
   description = " The throughput to provision for a gp3 volume in MiB/s"
   type        = number
-  default     = "3000"
+  default     = null
 }
 
 variable "enabled_monitoring" {
@@ -88,3 +88,8 @@ variable "tags" {
   default     = {}
 }
 
+variable "template_tags" {
+  description = "Additional tags for the instance templates"
+  type        = map(string)
+  default     = {}
+}

@@ -5,7 +5,7 @@ output "arn" {
 
 output "id" {
   description = "The ID of the launch template."
-  value       = aws_launch_template.this[*].id
+  value       = element(aws_launch_template.this[*].id, 0)
 }
 
 output "name" {

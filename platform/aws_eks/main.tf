@@ -22,40 +22,36 @@ module "launch_template" {
     source = "../../modules/launch_template"
 
     name                     = "node-1"
-    launch_template_image_id = "ami-074251216af698218"
-    security_groups          = ["sg-028cd58d5e66bd3ac"]
-    user_data = <<-EOT
-        #!/bin/zbash -x
-        sudo bash -c 'cat <<EOF > /etc/sysctl.d/90-kubelet.conf
-        vm.overcommit_memory = 1
-        vm.panic_on_oom = 0
-        kernel.panic = 10
-        kernel.panic_on_oops = 1
-        kernel.keys.root_maxkeys = 1000000
-        kernel.keys.root_maxbytes = 25000000
-        EOF'
-    EOT
+
+    tags = {
+        Name = "EKS-MANAGED-NODE"
+    }
 
     depends_on = [
         module.eks
     ]
 }
 
-module "node_groups" {
+module "worker_node_group" {
     source = "../../modules/node_groups"
 
-    cluster_name = "eks-rancher"
+    cluster_name = var.cluster_name
     default_iam_role_arn = "arn:aws:iam::420705257211:role/eksNodeRole"
-    workers_group_defaults = local.workers_group_defaults
+    worker_subnet_ids    = var.worker_subnet_ids 
     node_groups = {
-        example = {
-            desired_capacity   = 1
+        worker = {
+            desired_capacity   = 2
             max_capacity       = 10
             min_capacity       = 1
-            launch_template_id = module.launch_template.*.id
+            launch_template_id = module.launch_template.id
+            tags = {
+                Environment = "Dev"
+            }
             taints = [
                 {
-                    Environment = "Dev"
+                    key    = "dedicated"
+                    value  = "workerGroup"
+                    effect = "NO_SCHEDULE"
                 }
             ]
         }
@@ -64,6 +60,22 @@ module "node_groups" {
     tags = var.tags
 
     depends_on = [
-        module.eks
+        module.eks,
+        module.launch_template
     ]
 }
+
+## Adding CoreDNS and AWS EBS CNI as soon as worker nodes are ready
+#module "addons" {
+    #source = "../../modules/eks-addons"
+
+    #cluster_name       = var.cluster_name
+    #eks_addons = {
+        #coredns = {},
+        #aws-ebs-csi-driver = {},
+    #}
+
+    #depends_on = [
+        #module.worker_node_group
+    #]
+#}

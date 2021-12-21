@@ -48,8 +48,7 @@ resource "aws_eks_cluster" "this" {
 module "required_addons" {
   source = "../eks-addons"
 
-  cluster_name       = var.cluster_name
-  eks_addon_defaults = local.eks_addon_defaults
+  cluster_name  = var.cluster_name
   eks_addons = {
     vpc-cni = {},
     kube-proxy = {},

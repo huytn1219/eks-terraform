@@ -5,22 +5,21 @@
 resource "aws_eks_node_group" "this" {
     for_each = local.node_groups_expanded
 
-    node_group_name_prefix = lookup(each.value, "name", null) == null ? local.node_groups_names[each.key] : null
-    node_group_name        = lookup(each.value, "name", null)
+    node_group_name        = each.key 
 
     cluster_name           = var.cluster_name
     node_role_arn          = each.value["iam_role_arn"]
-    subnet_ids             = each.value["subnets"]
-
+    subnet_ids             = each.value["subnet_ids"]
+    
     scaling_config {
         desired_size = each.value["desired_capacity"]
         max_size     = each.value["max_capacity"]
         min_size     = each.value["min_capacity"]
     }
 
-    ami_type                  = lookup(each.value, "ami_type", null)
-    disk_size                 = each.value["launch_template_id"] != null ? null : lookup(each.value, "disk_size", null)
-    instance_types            = lookup(each.value, "instance_type", null)
+    ami_type                  = each.value["ami_type"]
+    disk_size                 = each.value["launch_template_id"] != null ? null : each.value["disk_size"]
+    instance_types            = each.value["instance_types"]
     release_version           = lookup(each.value, "ami_release_version", null)
     capacity_type             = lookup(each.value, "capacity_type", null)
     force_update_version      = lookup(each.value, "force_update_version", null)

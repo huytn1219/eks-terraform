@@ -22,8 +22,3 @@ variable "eks_addons" {
   default     = {}
 }
 
-variable "eks_addon_defaults" {
-  description = "EKS addons defaults from parent"
-  type        = any
-  default     = {}
-}

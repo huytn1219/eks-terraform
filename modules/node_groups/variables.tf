@@ -5,12 +5,6 @@ variable "create_eks" {
   default     = true
 }
 
-variable "workers_group_defaults" {
-  description = "Workers group defaults from parent"
-  type        = any
-  default     = {}
-}
-
 variable "cluster_name" {
   description = "Name of parent cluster"
   type        = string
@@ -39,5 +33,11 @@ variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
   default     = {}
+}
+
+variable "worker_subnet_ids" {
+  description = "List of the subnets where worker nodes will be deployed on to"
+  type        = list(string)
+  default     = []
 }
 
