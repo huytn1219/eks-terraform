@@ -75,7 +75,19 @@ variable "worker_subnet_ids" {
   default     = []
 }
 
-variable "cluster_addons" {
-  description = "EKS add-on(s)"
-  type        = set(string)
+
+variable "launch_template_name" {
+  description = "The name of the launch template"
+  type        = string
+}
+
+variable "iam_node_role_arn" {
+  description = "The ARN of the EKS Node Role"
+  type        = string
+}
+
+variable "node_groups" {
+  description = "Map of maps of `eks_node_groups` to create. See \"`node_groups` and `node_groups_defaults` keys\" section in README.md for more details"
+  type        = any
+  default     = {}
 }

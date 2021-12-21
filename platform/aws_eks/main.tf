@@ -21,7 +21,7 @@ module "eks" {
 module "launch_template" {
     source = "../../modules/launch_template"
 
-    name                     = "node-1"
+    name = var.launch_template_name
 
     tags = {
         Name = "EKS-MANAGED-NODE"
@@ -36,26 +36,9 @@ module "worker_node_group" {
     source = "../../modules/node_groups"
 
     cluster_name = var.cluster_name
-    default_iam_role_arn = "arn:aws:iam::420705257211:role/eksNodeRole"
+    default_iam_role_arn = var.iam_node_role_arn 
     worker_subnet_ids    = var.worker_subnet_ids 
-    node_groups = {
-        worker = {
-            desired_capacity   = 2
-            max_capacity       = 10
-            min_capacity       = 1
-            launch_template_id = module.launch_template.id
-            tags = {
-                Environment = "Dev"
-            }
-            taints = [
-                {
-                    key    = "dedicated"
-                    value  = "workerGroup"
-                    effect = "NO_SCHEDULE"
-                }
-            ]
-        }
-    } 
+    node_groups = var.node_groups
 
     tags = var.tags
 
@@ -66,16 +49,16 @@ module "worker_node_group" {
 }
 
 ## Adding CoreDNS and AWS EBS CNI as soon as worker nodes are ready
-#module "addons" {
-    #source = "../../modules/eks-addons"
+module "addons" {
+    source = "../../modules/eks-addons"
 
-    #cluster_name       = var.cluster_name
-    #eks_addons = {
-        #coredns = {},
-        #aws-ebs-csi-driver = {},
-    #}
+    cluster_name       = var.cluster_name
+    eks_addons = {
+        coredns = {},
+        aws-ebs-csi-driver = {},
+    }
 
-    #depends_on = [
-        #module.worker_node_group
-    #]
-#}
+    depends_on = [
+        module.worker_node_group
+    ]
+}
