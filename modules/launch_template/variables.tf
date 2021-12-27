@@ -25,7 +25,7 @@ variable "launch_template_image_id" {
 variable "device_name" {
   description = " The name of the device to mount."
   type        = string
-  default     = "/dev/sda1"
+  default     = "/dev/xvda"
 }
 
 variable "delete_on_termination" {
@@ -92,4 +92,41 @@ variable "template_tags" {
   description = "Additional tags for the instance templates"
   type        = map(string)
   default     = {}
+}
+
+variable "cluster_name" {
+  description = "The name of the EKS cluster"
+  type        = string
+  default     = ""
+}
+
+variable "cluster_endpoint" {
+  description = "The endpoint of parent cluster"
+  type        = string
+  default     = ""
+}
+
+variable "cluster_auth_base64" {
+  description = "Base64 encoded CA of parent cluster"
+  type        = string
+  default     = ""
+}
+
+variable "pre_userdata" {
+  description = "userdata to pre-append to the default userdata."
+  type        = string
+  default     = ""
+}
+
+
+variable "capacity_type" {
+  description = "Type of instance capacity to provision. Options are ON_DEMAND and SPOT"
+  type        = string
+  default     = "ON_DEMAND"
+}
+
+variable "key_name" {
+  description = "Name of the associated key pairs"
+  type        = string
+  default     = ""
 }

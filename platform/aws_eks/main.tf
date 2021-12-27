@@ -22,6 +22,12 @@ module "launch_template" {
     source = "../../modules/launch_template"
 
     name = var.launch_template_name
+    cluster_name = var.cluster_name
+    associate_public_ip_address = true
+    cluster_endpoint = module.eks.cluster_endpoint
+    cluster_auth_base64 = module.eks.cluster_certificate_authority_data
+    launch_template_image_id = "ami-0a3ba7408f8f56c84"
+    key_name = "eks"
 
     tags = {
         Name = "EKS-MANAGED-NODE"
@@ -36,8 +42,8 @@ module "worker_node_group" {
     source = "../../modules/node_groups"
 
     cluster_name = var.cluster_name
-    default_iam_role_arn = var.iam_node_role_arn 
-    worker_subnet_ids    = var.worker_subnet_ids 
+    default_iam_role_arn = var.iam_node_role_arn
+    worker_subnet_ids    = var.worker_subnet_ids
     node_groups = var.node_groups
 
     tags = var.tags
