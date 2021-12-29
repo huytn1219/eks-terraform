@@ -54,17 +54,17 @@ module "worker_node_group" {
     ]
 }
 
-## Adding CoreDNS and AWS EBS CNI as soon as worker nodes are ready
-module "addons" {
-    source = "../../modules/eks-addons"
+### Adding CoreDNS and AWS EBS CNI as soon as worker nodes are ready
+#module "addons" {
+    #source = "../../modules/eks-addons"
 
-    cluster_name       = var.cluster_name
-    eks_addons = {
-        coredns = {},
-        aws-ebs-csi-driver = {},
-    }
+    #cluster_name       = var.cluster_name
+    #eks_addons = {
+        #coredns = {},
+        #aws-ebs-csi-driver = {},
+    #}
 
-    depends_on = [
-        module.worker_node_group
-    ]
-}
+    #depends_on = [
+        #module.worker_node_group
+    #]
+#}
